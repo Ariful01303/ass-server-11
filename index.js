@@ -1,5 +1,4 @@
 const express =require('express')
-const bodyParser = require("body-parser");
 const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config()
@@ -22,6 +21,7 @@ async function run() {
       const testCollection = database.collection("services");
       const bookingCollection = client.db("tourSpot").collection("booking");
       const myaddCollection = client.db("myadd").collection("addservice");
+      const clintCollection = client.db("happyClint").collection("clients");
      
       
     //   get api 
@@ -39,6 +39,12 @@ async function run() {
         console.log(result);
         res.json(result)
     });
+    // get clients api
+    app.get('/clients', async (req, res) => {
+      const cursor = clintCollection.find({});
+      const services = await cursor.toArray();
+      res.send(services);
+  });
     app.get('/addservice',async(req,res)=>{
         const cursor = myaddCollection.find({});
         const addserver=await cursor.toArray();
