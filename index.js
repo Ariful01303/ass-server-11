@@ -1,11 +1,12 @@
 const express =require('express')
-const { MongoClient } = require('mongodb');
+const { MongoClient, LEGAL_TCP_SOCKET_OPTIONS } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config()
 const cors=require('cors')
 const app =express()
 
-const port = process.env.PORT || 5000;
+// const port = process.env.PORT || 5000;
+const port=process.env.PORT || 5000;
 // middleware 
 app.use(cors())
 app.use(express.json())
@@ -92,7 +93,7 @@ async function run() {
   run().catch(console.dir);
   app.get('/',(req,res)=>{
     res.send('welcome to torism webserver')
-})
+});
 app.listen(port,()=>{
     console.log('server port',port)
 })
