@@ -46,18 +46,18 @@ async function run() {
       const services = await cursor.toArray();
       res.send(services);
   });
-    app.get('/addservice',async(req,res)=>{
-        const cursor = myaddCollection.find({});
-        const addserver=await cursor.toArray();
-        res.send(addserver)
-    })
-    // add data 
-    app.post('/addservice', async (req, res) => {
-        console.log(req.body);
-        const result = await myaddCollection.insertOne(req.body);
-       res.json(result)
-        console.log(result);
-      });
+    // app.get('/addservice',async(req,res)=>{
+    //     const cursor = myaddCollection.find({});
+    //     const addserver=await cursor.toArray();
+    //     res.send(addserver)
+    // })
+    // // add data 
+    // app.post('/addservice', async (req, res) => {
+    //     console.log(req.body);
+    //     const result = await myaddCollection.insertOne(req.body);
+    //    res.json(result)
+    //     console.log(result);
+    //   });
    
    
      
