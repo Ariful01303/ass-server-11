@@ -1,5 +1,7 @@
 const express =require('express')
+const bodyParser = require("body-parser");
 const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config()
 const cors=require('cors')
 const app =express()
@@ -18,6 +20,8 @@ async function run() {
       await client.connect();
       const database = client.db("tourismSport");
       const testCollection = database.collection("services");
+      const bookingCollection = client.db("tourSpot").collection("booking");
+      const myaddCollection = client.db("myadd").collection("addservice");
      
       
     //   get api 
@@ -26,8 +30,56 @@ async function run() {
         const servertest=await cursor.toArray();
         res.send(servertest)
     })
-      
-    } finally {
+    // post api
+    app.post('/services', async (req, res) => {
+        const service = req.body;
+        console.log('hit the post api', service);
+
+        const result = await testCollection.insertOne(service);
+        console.log(result);
+        res.json(result)
+    });
+    app.get('/addservice',async(req,res)=>{
+        const cursor = myaddCollection.find({});
+        const addserver=await cursor.toArray();
+        res.send(addserver)
+    })
+    // add data 
+    app.post('/addservice', async (req, res) => {
+        console.log(req.body);
+        const result = await myaddCollection.insertOne(req.body);
+       res.json(result)
+        console.log(result);
+      });
+   
+   
+     
+      // Add booking 
+    app.post('/booking',(req,res)=>{
+        bookingCollection.insertOne(req.body).then((result) => {
+            res.send(result);
+          });
+    })
+      // get all booking by email query
+  app.get("/booking/:email", (req, res) => {
+    console.log(req.params);
+    bookingCollection
+      .find({ email: req.params.email })
+      .toArray((err, results) => {
+        res.send(results);
+      });
+  });
+//   delete 
+  app.delete("/booking/:id", async(req, res) => {
+     
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const result = await bookingCollection.deleteOne(query);
+    res.json(result);
+})
+ 
+    }
+     finally {
     //   await client.close();
     }
   }
